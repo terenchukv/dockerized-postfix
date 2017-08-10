@@ -1,0 +1,28 @@
+version: '3'
+services:
+    mail:
+        build: mail
+        hostname: ${MAIL_HOST}
+        domainname: ${MAIL_DOMAIN}
+        container_name: mail
+        environment:
+            MAIL_DOMAIN: ${MAIL_SENDERS}
+            SENDER_HOST: ${SENDER_HOST}
+            CERT_COUNTRY: ${CERT_COUNTRY}
+            CERT_STATE: ${CERT_STATE}
+            CERT_CITY: ${CERT_CITY}
+            CERT_COMPANY: ${CERT_COMPANY}
+            CERT_DOMAIN: ${MAIL_DOMAIN}
+        ports:
+            - "25:25"
+        volumes:
+            - mail_data:/var/lib/postfix
+            - mail_quene_data:/var/spool/postfix
+            - dkim_db:/var/db/dkim
+volumes:
+    mail_data:
+        driver: local
+    mail_quene_data:
+        driver: local
+    dkim_db:
+        driver: local
