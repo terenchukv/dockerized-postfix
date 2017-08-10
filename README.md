@@ -1,6 +1,9 @@
 # Postfix MTA with TLS encryption and DKIM in Docker container
 Simple in usage isolated SMTP server
 
+# Link on Docker Hub
+https://hub.docker.com/r/terenchukv/postfix/
+
 # REQUIREMENTS
 - Docker
 - Docker compose 
@@ -12,15 +15,16 @@ Simple in usage isolated SMTP server
 cp .env.dist .env
 ``` 
 
+- For example your domain: mail.example.com
 ```
-MAIL_HOST=    <--- container hostname
-MAIL_DOMAIN=  <--- domain name which point A record to your host
-MAIL_SENDERS= <--- MAIL_HOST + MAIL_DOMAIN
-SENDER_HOST=  <--- MAIL_HOST + MAIL_DOMAIN
-CERT_COUNTRY=
-CERT_STATE=
-CERT_CITY=
-CERT_COMPANY=
+MAIL_HOST=mail    <--- container hostname
+MAIL_DOMAIN=example.com  <--- domain name which point A record to your host
+MAIL_SENDERS=mail.example.com <--- MAIL_HOST + MAIL_DOMAIN
+SENDER_HOST=mail.example.com  <--- MAIL_HOST + MAIL_DOMAIN
+CERT_COUNTRY=Ukraine
+CERT_STATE=Kiev
+CERT_CITY=Kiev
+CERT_COMPANY=my_awsome_company
 ```
 
 - build docker container
@@ -39,7 +43,7 @@ iptables -A INPUT -m state --state NEW -m tcp -p tcp --dport 25 -j ACCEPT
 
 - Find DKIM record in /var/db/dkim/your_domain/default.txt and add this record in yor domain registrator
 ```
-docker exec -it mail sh -c "cat /var/db/dkim/your_domai/default.txt"
+docker exec -it mail sh -c "cat /var/db/dkim/your_domain/default.txt"
 ```
 
 # TEST SMTP
@@ -47,7 +51,7 @@ docker exec -it mail sh -c "cat /var/db/dkim/your_domai/default.txt"
 ```
 docker exec -it mail sh
 ```
-- send test mai
+- send test mail
 ```
 echo 'Subject: test' | /usr/sbin/sendmail your_mail@test.com
 ```
